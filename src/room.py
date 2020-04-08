@@ -9,3 +9,5 @@ class Room():
     self.s_to = s_to 
     self.e_to = e_to 
     self.w_to = w_to
+  def __str__(self):
+    return f"Your Location: {self.name} - {self.description}"
