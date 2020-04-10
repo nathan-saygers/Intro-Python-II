@@ -76,17 +76,45 @@ def move():
     if getattr(room[davie.current_room], move_dir) != None:
         davie.current_room = getattr(room[davie.current_room], move_dir)
         print(room[davie.current_room])
-        room[davie.current_room].get_items()
+        room[davie.current_room].print_items()
         player_input = input("Please enter a command:")
     else:
         print('There is no room in that direction')
         player_input = input("Please enter a command:")
 
+# def get():
+
+
 # REPL:
 
 while player_input != 'q':
-    if player_input == 'n' or player_input == 's' or player_input == 'e' or player_input == 'w':
-        move()
+    input_arr = player_input.split(" ")
+    if len(input_arr) < 2:
+        if player_input == 'n' or player_input == 's' or player_input == 'e' or player_input == 'w':
+            move()
+        elif player_input == 'i':
+            davie.print_inventory()
+            player_input = input("Please enter a command:")
+        else:
+            print('Please enter a cardinal direction (ex. n, s, e, w)')
+            player_input = input("Please enter a command:")
     else:
-        print('Please enter a cardinal direction (ex. n, s, e, w)')
-        player_input = input("Please enter a command:")
+        if input_arr[0] == 'get':
+            if room[davie.current_room].got_item(input_arr[1]):
+                davie.get_item(items[input_arr[1]])
+                print(f"You picked up the {input_arr[1]}")
+                player_input = input("Please enter a command:")
+            else: 
+                print(f"There is no {input_arr[1]} in this room ya goober")
+                player_input = input("Please enter a command:")
+        elif input_arr[0] == 'drop':
+            if davie.dropped_item(input_arr[1]):
+                room[davie.current_room].receive_item(items[input_arr[1]])
+                print(f"You dropped the {input_arr[1]}")
+                player_input = input("Please enter a command:")
+            else: 
+                print(f"You don't have a {input_arr[1]} to drop!")
+                player_input = input("Please enter a command:")
+        else:
+            print('Please enter a valid two word command (ex. get torch, drop drawers)')
+            player_input = input("Please enter a command:")
